@@ -52,6 +52,22 @@ HARDEST_MAZE = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 0, 0, 1, G, 0, G, 1, 0, G, 0, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
+# For offline antmaze
+U_MAZE_ANT = [[1, 1, 1, 1, 1],
+              [1, R, G, G, 1],
+              [1, 1, 1, G, 1],
+              [1, G, G, G, 1],
+              [1, 1, 1, 1, 1]]
+
+BIG_MAZE_ANT = [[1, 1, 1, 1, 1, 1, 1, 1],
+                [1, R, G, 1, 1, G, G, 1],
+                [1, G, G, 1, G, G, G, 1],
+                [1, 1, G, G, G, 1, 1, 1],
+                [1, G, G, 1, G, G, G, 1],
+                [1, G, 1, G, G, 1, G, 1],
+                [1, G, G, G, 1, G, G, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1]]
+
 # Maze specifications with a single target goal
 U_MAZE_TEST = [[1, 1, 1, 1, 1],
               [1, R, 0, 0, 1],
@@ -263,7 +279,7 @@ class MazeEnv(gym.Env):
     else:
       self.target_goal = goal_input
     
-    print ('Target Goal: ', self.target_goal)
+    # print ('Target Goal: ', self.target_goal)
     ## Make sure that the goal used in self._goal is also reset:
     self._goal = self.target_goal
 

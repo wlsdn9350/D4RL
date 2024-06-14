@@ -1,4 +1,4 @@
-from .maze_model import MazeEnv, OPEN, U_MAZE, MEDIUM_MAZE, LARGE_MAZE, U_MAZE_EVAL, MEDIUM_MAZE_EVAL, LARGE_MAZE_EVAL
+from .maze_model import MazeEnv, OPEN, U_MAZE, MEDIUM_MAZE, LARGE_MAZE, U_MAZE_EVAL, MEDIUM_MAZE_EVAL, LARGE_MAZE_EVAL, rand_layout
 from gym.envs.registration import register
 
 register(
@@ -287,4 +287,20 @@ register(
         'ref_max_score': 326.09647655082637,
         'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-eval-large-dense-v1.hdf5'
     }
+)
+
+
+register(
+    id="maze2d-randMaze0S40-ac-v0",
+    entry_point="d4rl.pointmaze:MazeEnv",
+    max_episode_steps=2000,
+    kwargs={
+        "maze_spec": rand_layout(seed=0, size=40),
+        "agent_centric_view": True,
+        "reward_type": "sparse",
+        "reset_target": False,
+        "ref_min_score": 4.83,
+        "ref_max_score": 191.99,
+        "dataset_url": "http://maze2d-hardexpv2-sparse.hdf5",
+    },
 )
