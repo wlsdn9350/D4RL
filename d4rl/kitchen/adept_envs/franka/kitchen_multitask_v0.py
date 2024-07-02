@@ -20,6 +20,7 @@ import numpy as np
 from d4rl.kitchen.adept_envs import robot_env
 from d4rl.kitchen.adept_envs.utils.configurable import configurable
 from gym import spaces
+import mujoco_py    # for GPU-speccific rendering
 from dm_control.mujoco import engine
 
 @configurable(pickleable=True)
@@ -190,9 +191,24 @@ class KitchenTaskRelaxV1(KitchenV0):
 
     def render(self, mode='human'):
         if mode =='rgb_array':
-            camera = engine.MovableCamera(self.sim, 1920, 2560)
-            camera.set_pose(distance=2.2, lookat=[-0.2, .5, 2.], azimuth=70, elevation=-35)
-            img = camera.render()
+            if not hasattr(self, "viewer"):
+                self.viewer = mujoco_py.MjRenderContextOffscreen(self.sim, offscreen=True, device_id=0, opengl_backend='glfw', quiet=True)
+                self.viewer.cam.lookat[0] = -0.2
+                self.viewer.cam.lookat[1] = .5
+                self.viewer.cam.lookat[2] = 2.
+                self.viewer.cam.distance = 2.2
+                self.viewer.cam.azimuth = 70
+                self.viewer.cam.elevation = -35
+            #camera = engine.MovableCamera(self.sim, 1920, 2560)
+            #camera.set_pose(distance=2.2, lookat=[-0.2, .5, 2.], azimuth=70, elevation=-35)
+            render_device = os.environ.get("CUDA_VISIBLE_DEVICES") if os.environ.get("CUDA_VISIBLE_DEVICES") is not None else -1
+            img = self.sim.render(400, 400, device_id=render_device)[::-1] #camera.render()
+            #img = camera.render()
             return img
+        # if mode =='rgb_array':
+        #     camera = engine.MovableCamera(self.sim, 1920, 2560)
+        #     camera.set_pose(distance=2.2, lookat=[-0.2, .5, 2.], azimuth=70, elevation=-35)
+        #     img = camera.render()
+        #     return img
         else:
             super(KitchenTaskRelaxV1, self).render()
